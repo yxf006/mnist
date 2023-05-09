@@ -16,7 +16,9 @@ model.load_state_dict(torch.load(path))
 print(f'loaded model from {path}')
 print(model)
 
-
+# 将模型移动到设备上
+model = model.to(device)
+model.eval()
 
 def test(path):
     print(f'test {path}...')
@@ -27,7 +29,8 @@ def test(path):
         transforms.Grayscale(1),
         transforms.ToTensor()
     ])
-    image_tensor = trans(image).unsqueeze(0).to(device)
+    image_tensor = trans(image).unsqueeze(0)
+    image_tensor = image_tensor.to(device)  # 将输入图像张量移动到设备上
     model.eval()
     with torch.no_grad():
         output = model(image_tensor)
